@@ -35,9 +35,9 @@
         <h1>Congratulations!</h1>
         <p>You successfully tested your freedom to use the Internet.</p>
         <p>{Insert graph here}</p>
-        <h2>Join the fight for freedom</h2>
-        <p>Using the following form, you will be able to report anonymously
-            the reporting for us to use.</p>
+        <h2>Joining the fight for freedom is easy</h2>
+        <p>Using the following form, you will be able to report <strong>anonymously</strong>.</p>
+        <p>You'll help all citizen across Europe get a better access to the Real Internet. </p>
         <div id="reportingActions" style="">
             <form action="portscanreceive.php" method="post" accept-charset="utf-8" id="portscan_submit">
                 <dl>
