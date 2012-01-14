@@ -16,7 +16,7 @@
                 <h3><a href="/">Report My Net</a></h3>
                 <ul class="nav">
                     <li><a href="http://respectmy.net">Back to RespectMyNet</a></li>
-                    <li><a href="faq.html">What is this?</a></li>
+                    <li><a href="faq.html" id="faq">What is this?</a></li>
                 </ul>
 
             </div>
@@ -35,6 +35,7 @@
         <h1>Congratulations!</h1>
         <p>You successfully tested your freedom to use the Internet.</p>
         <p>{Insert graph here}</p>
+        <h2>Join the fight for freedom</h2>
         <p>Using the following form, you will be able to report anonymously
             the reporting for us to use.</p>
         <div id="reportingActions" style="">
