@@ -5,7 +5,11 @@
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.1.1.min.css">
 </head>
 <body>
-
+<noscript>
+    <div class="alert-message danger">
+        This page requires Javascript. 
+    </div>
+</noscript>    
 <div id="loader" style="background:rgba(0,0,0,0.5);color:white;display:none;height:100%;padding:top:300px;position:fixed;text-align:center;width:100%;z-index:9;">
     Loading, please wait...
 </div>
