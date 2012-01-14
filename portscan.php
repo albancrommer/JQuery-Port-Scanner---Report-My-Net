@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>Report My Net : scan your access </title>
+    <title>Report My Net : test your freedom </title>
     <script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap-1.1.1.min.css">
 </head>
@@ -71,8 +71,7 @@
 <script type="text/javascript" charset="utf-8">
     
 $(function(){
-    
-    
+
     var _RMN = window.RMN;
     var RMN = window.RMN = {
         
@@ -86,6 +85,7 @@ $(function(){
             }
 
             var _collection = {};
+            var _status = {};
             var _fn         = null;
             var _timeout;
             function scanner() {
@@ -97,39 +97,42 @@ $(function(){
                     $('#home').hide();
                 },
                 _postScan : function(){
-
+                    
                     $('#reporting').show();
                     $("#loader").hide();
                     
                 },
                 _isOpen : function( bool ) {
-                    return bool?"opened":"closed";
+                    return bool?"open":"closed";
                 },
                 collect : function (target, port, status)
                 {
                     _collection[port] = status;
                     // console.log( _collection, target, port, status);
-                    msg = "port "+port+" is "+_fn._isOpen(status)+".\n";
-                    $('#reportingDetails').append(msg);
                     
                 },
             	scanPort : function (target, page, port, timeout) {
-                	if (undefined == _timeout) {
-                	   _timeout = (timeout == null)?1000:timeout; 
-                	}
-                	var img = new Image();
-                	img.onerror = function () {
-                		if (!img) return;
-                		img = undefined;
-                		_fn.collect(target, port, 1);
-                	};
-                	img.onload = img.onerror;
-                	img.src =  target + ':' + port + "/" + page;
-                	setTimeout(function () {
-                		if (!img) return;
-                		img = undefined;
-                		_fn.collect(target, port, 0);
-                	}, timeout);
+                    _fn.collect(target, port, 0);
+                    $.ajax({
+                        url: target + ':' + port + "/" + page,
+                        accepts: "text/html",
+                        type: 'post',
+                        crossDomain: "true",
+                        dataType:"jsonp",
+                        complete: function(jqXHR,status) {
+                            _status[port] = status;
+                        },
+                        success: function(data) {
+                            _fn.collect(target, port, 1);
+                            
+                        },
+                        error: function( jqXHR, status, errorThrown){
+                            console.log(jqXHR, status, errorThrown);
+                            _fn.collect(target, port, 0);
+                        }
+                        
+                    });
+                    
                 },
                 scanTarget : function (target, page, ports, timeout)
                 {
@@ -139,12 +142,19 @@ $(function(){
                     }
                     setTimeout(function() {
                         _fn._postScan(); // hook : DOM work
-                        _fn.report();
                     },_timeout);
                 },
                 report : function ()
                 {
                     console.log( _collection);
+                    console.log( _status);
+                    $('#reportingDetails').html("");
+                    for( i in _collection){
+                        msg = "port "+i+" is "+_fn._isOpen(_collection[i]);
+                        msg += " and responded with status:"+_status[i];
+                        msg += "\n";
+                        $('#reportingDetails').append(msg);
+                    }
 
                 },
                 getData : function()
@@ -157,12 +167,15 @@ $(function(){
             })(),
 
     };
-
+    
+    
     $('#start').click(function(e){
         e.preventDefault();
         ports       = [80,443,8080,5060,5061,25,110,995,143,220,993,22,53,6666,6667,6697,21,20,5222,5223,5269,5280,3724,554,43,23,992];
         target      = "http://responder.lqdn.fr";
-        page        = "simple.php";
+        page        = "json.php";
+        // target      = "http://<?php echo $_SERVER["HTTP_HOST"];?>";
+        // page        = "portscan/json.php";
         RMN.scanner.scanTarget(target,page,ports,7000);
     });
     
@@ -173,6 +186,7 @@ $(function(){
         console.log(postData);
         $.ajax({
            url: form.attr("action"),
+           // url:"",
            accepts: "text/html",
            type: 'post',
            dataType:"json",
@@ -191,6 +205,7 @@ $(function(){
     $("#preview").live('click',function(e) {
         e.preventDefault();
         $('#reportingDetails').toggle();
+        window.RMN.scanner.report();
     });
  
     });
@@ -199,6 +214,7 @@ $(function(){
 <style type="text/css" media="screen">
     body{padding-top:40px;}
     .container label{width:200px;margin-right:16px;}
+    #id_operator{font-size:16pt;height:30px;}
 </style>
 </body>    
 </html>
