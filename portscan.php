@@ -40,22 +40,23 @@
                 as follows :
             </p>
             <div class="row" id="name">
-                <div class="span4" id="name">
+                <div class="span3">
                     <strong>1</strong> Use a Mozilla browser, like Firefox. 
                     If you do not already, pick one on the website of 
                     <a href="http://www.mozilla.org/" target="_blank">
                         the Mozilla Foundation
                     </a>. It's free and awesome.
                 </div>
-                <div class="span4" id="name">
+                <div class="span3">
                     <strong>2</strong> Read the <a href="http://mozilla.gunnars.net/mozilla_howto_aboutconfig.html">tutorial here</a>.
-                    Now open your configuration by type directly 
+                    Now open your configuration by typing directly 
                     <code>about:config</code> in the URL bar.
                 </div>
-                <div class="span4" id="name">
+                <div class="span9" >
                     <strong>3</strong> Add a preference with type "String"called <code>network.security.ports.banned.override</code>
-                    with a value of<code>1,7,9,11,13,15,17,19,20,21,22,23,25,37,42,43,53,77,79,87,95,101,102,103,104,109,110,111,113,115,117,119,123,135,139,143,179,389,465,512,513,514,515,526,530,531,532,540,556,563,587,601,636,993,995,2049,4045,6000
-                    </code>
+                    with a value of
+                    <pre style="width:520px">1,7,9,11,13,15,17,19,20,21,22,23,25,37,42,43,53,77,79,87,95,101,102,103,104,109,110,111,113,115,117,119,123,135,139,143,179,389,465,512,513,514,515,526,530,531,532,540,556,563,587,601,636,993,995,2049,4045,6000
+                    </pre>
                 </div>
                     
             </div>
@@ -128,7 +129,6 @@ $(function(){
             var _collection = {};
             var _status = {};
             var _fn         = null;
-            var _timeout;
             function scanner() {
                 _fn             = this;
             }
@@ -152,7 +152,7 @@ $(function(){
                     // console.log( _collection, target, port, status);
                     
                 },
-            	scanPort : function (target, page, port, timeout) {
+            	scanPort : function (target, page, port) {
                     _fn.collect(target, port, 0);
                     $.ajax({
                         url: target + ':' + port + "/" + page,
@@ -175,15 +175,13 @@ $(function(){
                     });
                     
                 },
-                scanTarget : function (target, page, ports, timeout)
+                scanTarget : function (target, page, ports)
                 {
                     _fn._preScan(); // hook : DOM work
                     for (index = 0; index < ports.length; index++){
-                        _fn.scanPort(target, page, ports[index], timeout);
+                        _fn.scanPort(target, page, ports[index]);
                     }
-                    setTimeout(function() {
-                        _fn._postScan(); // hook : DOM work
-                    },_timeout);
+                    _fn._postScan(); // hook : DOM work
                 },
                 report : function ()
                 {
@@ -217,7 +215,7 @@ $(function(){
         page        = "json.php";
         // target      = "http://<?php echo $_SERVER["HTTP_HOST"];?>";
         // page        = "portscan/json.php";
-        RMN.scanner.scanTarget(target,page,ports,7000);
+        RMN.scanner.scanTarget(target,page,ports);
     });
     
     $("#send").live("click",function(e){
