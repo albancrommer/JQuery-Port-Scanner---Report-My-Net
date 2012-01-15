@@ -29,9 +29,45 @@
 </div>
 <div class="container" style="margin-top:10px">
     <div class="row">
-        <div class="span12" id="home">
+        <div class="span16" id="home">
             <h1>Is your freedom restrained by your ISP? </h1>
             <p>Let's check out right now.</p>
+            
+            <h3>Configurating your browser</h3>
+            <p>
+                This page uses advanced technics to test your connection.
+                You must configure your browser <strong>temporarily</strong> 
+                as follows :
+            </p>
+            <div class="row" id="name">
+                <div class="span4" id="name">
+                    <strong>1</strong> Use a Mozilla browser, like Firefox. 
+                    If you do not already, pick one on the website of 
+                    <a href="http://www.mozilla.org/" target="_blank">
+                        the Mozilla Foundation
+                    </a>. It's free and awesome.
+                </div>
+                <div class="span4" id="name">
+                    <strong>2</strong> Read the <a href="http://mozilla.gunnars.net/mozilla_howto_aboutconfig.html">tutorial here</a>.
+                    Now open your configuration by type directly 
+                    <code>about:config</code> in the URL bar.
+                </div>
+                <div class="span4" id="name">
+                    <strong>3</strong> Add a preference with type "String"called <code>network.security.ports.banned.override</code>
+                    with a value of<code>1,7,9,11,13,15,17,19,20,21,22,23,25,37,42,43,53,77,79,87,95,101,102,103,104,109,110,111,113,115,117,119,123,135,139,143,179,389,465,512,513,514,515,526,530,531,532,540,556,563,587,601,636,993,995,2049,4045,6000
+                    </code>
+                </div>
+                    
+            </div>
+            <h3>Test your connection</h2>
+            <p>Click on <a href="http://responder.lqdn.fr:21/simple.php" target="_blank">
+                this test link</a>. The page should show something like this:
+                </p>
+<pre>xxx.xxx.xxx.xxx 21
+15/01/2012 13:06:15</pre>
+                
+            <p>If it doesn't please read the <a href="faq.html">FAQ</a></p>
+            <h3>Start the test</h2>
             <a id="start" class="btn">Start test</a>
         
         </div>
@@ -156,7 +192,7 @@ $(function(){
                     $('#reportingDetails').html("");
                     for( i in _collection){
                         msg = "port "+i+" is "+_fn._isOpen(_collection[i]);
-                        msg += " and responded with status:"+_status[i];
+                        msg += " and responded with status: "+_status[i];
                         msg += "\n";
                         $('#reportingDetails').append(msg);
                     }
@@ -176,7 +212,7 @@ $(function(){
     
     $('#start').click(function(e){
         e.preventDefault();
-        ports       = [80,443,8080,5060,5061,25,110,995,143,220,993,22,53,6666,6667,6697,21,20,5222,5223,5269,5280,3724,554,43,23,992];
+        ports       = [1,7,9,11,13,15,17,19,20,21,22,23,25,37,42,43,53,77,79,80,87,95,101,102,103,104,109,110,111,113,115,117,119,123,135,139,143,179,220,389,443,465,512,513,514,515,526,530,531,532,540,554,556,563,587,601,636,992,993,995,2049,3724,4045,5060,5061,5222,5223,5269,5280,6000,6666,6667,6697,8080];
         target      = "http://responder.lqdn.fr";
         page        = "json.php";
         // target      = "http://<?php echo $_SERVER["HTTP_HOST"];?>";
